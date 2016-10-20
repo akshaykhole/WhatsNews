@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WhatsNews</string>
+    <string name="etSearchQueryHint">Enter a search query</string>
+    <string name="btnTextSearch">Search</string>
+</resources>
