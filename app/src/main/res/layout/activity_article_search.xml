@@ -4,8 +4,8 @@
     android:id="@+id/activity_search_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="com.akshaykhole.whatsnews.articles.ArticleSearchActivity">
+    tools:context="com.akshaykhole.whatsnews.articles.ArticleSearchActivity"
+    android:padding="10dp">
 
     <EditText
         android:layout_width="wrap_content"
@@ -29,9 +29,10 @@
         android:onClick="onArticleSearch"/>
 
     <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/btnSearch"
         android:layout_centerHorizontal="true"
-        android:id="@+id/gvArticles" />
+        android:id="@+id/gvArticles"
+        android:numColumns="4"/>
 </RelativeLayout>

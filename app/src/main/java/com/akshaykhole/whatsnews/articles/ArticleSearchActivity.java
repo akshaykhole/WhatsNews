@@ -29,6 +29,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
     @BindView(R.id.searchQuery) EditText searchQuery;
 
     private ArrayList<ArticlesModel> articles;
+    ArticleArrayAdapter adapter;
 
 
     @Override
@@ -36,12 +37,12 @@ public class ArticleSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_search);
         ButterKnife.bind(this);
-
-        articles = new ArrayList<>();
+        initialize();
     }
 
     @OnClick
     public void onArticleSearch(View view) {
+        adapter.clear();
         String query = searchQuery.getText().toString();
         ArticleSearchClient articleFetcher = new ArticleSearchClient();
 
@@ -52,6 +53,8 @@ public class ArticleSearchActivity extends AppCompatActivity {
                 try {
                     JSONArray articlesResponse = response.getJSONObject("response").getJSONArray("docs");
                     articles.addAll(ArticlesModel.fromJSONArray(articlesResponse));
+//                    Log.d("DEBUG", articles.toString());
+                    adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -67,5 +70,11 @@ public class ArticleSearchActivity extends AppCompatActivity {
 
     public void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    private void initialize() {
+        articles = new ArrayList<>();
+        adapter = new ArticleArrayAdapter(this, articles);
+        gvArticles.setAdapter(adapter);
     }
 }
