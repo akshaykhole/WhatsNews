@@ -30,6 +30,8 @@ public class SearchMain extends AppCompatActivity {
     @OnClick
     public void onArticleSearch(View view) {
         String query = searchQuery.getText().toString();
+        ArticleSearchClient articleFetcher = new ArticleSearchClient();
+        articleFetcher.search(query, 0);
         showToast("Searching for " + query);
     }
 
