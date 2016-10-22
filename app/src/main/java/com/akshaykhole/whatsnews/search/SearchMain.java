@@ -31,7 +31,6 @@ public class SearchMain extends AppCompatActivity {
     public void onArticleSearch(View view) {
         String query = searchQuery.getText().toString();
         showToast("Searching for " + query);
-
     }
 
     public void showToast(String text) {
