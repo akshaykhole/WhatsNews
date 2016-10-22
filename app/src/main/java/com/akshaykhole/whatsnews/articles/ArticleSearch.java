@@ -1,4 +1,4 @@
-package com.akshaykhole.whatsnews.search;
+package com.akshaykhole.whatsnews.articles;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchMain extends AppCompatActivity {
+public class ArticleSearch extends AppCompatActivity {
     @BindView(R.id.btnSearch) Button btnSearch;
     @BindView(R.id.gvArticles) GridView gvArticles;
     @BindView(R.id.searchQuery) EditText searchQuery;
@@ -23,7 +23,7 @@ public class SearchMain extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_main);
+        setContentView(R.layout.activity_article_search);
         ButterKnife.bind(this);
     }
 
