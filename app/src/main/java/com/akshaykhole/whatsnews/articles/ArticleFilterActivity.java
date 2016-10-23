@@ -143,12 +143,11 @@ public class ArticleFilterActivity extends AppCompatActivity
                 newsDeskParamString += "\"" + selectedCheckboxes.get(i).toString() + "\"";
 
                 if (i < selectedCheckboxes.size() - 1) {
-                    newsDeskParamString += " ";
+                    newsDeskParamString += "%20";
                 }
             }
 
             newsDeskParamString += ")";
-            Log.d("DEBUG", newsDeskParamString);
             intent.putExtra("newsDesk", newsDeskParamString);
         } else {
             intent.putExtra("newsDesk", "NULL");

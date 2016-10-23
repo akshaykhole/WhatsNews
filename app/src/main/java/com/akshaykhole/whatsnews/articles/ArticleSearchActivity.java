@@ -46,6 +46,22 @@ public class ArticleSearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article_search);
         ButterKnife.bind(this);
         initialize();
+
+        // Listen for scrolls
+        gvArticles.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                loadMoreArticles(page);
+                return true;
+            }
+        });
+    }
+
+    public void loadMoreArticles(int page) {
+        Log.d("DEBUG", "Loading more..." + page);
+        this.page = page - 1;
+        setParamsForSearch();
+        setSearchResults();
     }
 
     @Override
@@ -87,7 +103,6 @@ public class ArticleSearchActivity extends AppCompatActivity {
     }
 
     public void setSearchResults() {
-        adapter.clear();
 
         ArticleSearchClient articleFetcher = new ArticleSearchClient();
         articleFetcher.search(params, new JsonHttpResponseHandler() {
@@ -102,7 +117,6 @@ public class ArticleSearchActivity extends AppCompatActivity {
                         showToast("No News found");
                     }
 
-                    Log.d("DEBUG", response.toString());
                     adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
@@ -123,6 +137,9 @@ public class ArticleSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Clear adapter after returning from filter activity
+        adapter.clear();
+
         try {
             intentFromFilter = data;
             setParamsForSearch();
@@ -135,7 +152,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
 
     private void setParamsForSearch() {
         params.put("q", searchQuery);
-
+        params.put("page", page);
         if (intentFromFilter != null) {
             if (!intentFromFilter.getStringExtra("startDate").equals("NULL")) {
                 params.put("begin_date", intentFromFilter.getStringExtra("startDate"));
@@ -168,6 +185,8 @@ public class ArticleSearchActivity extends AppCompatActivity {
         searchQuery = null;
         params.put("api-key", ArticleSearchClient.articleApiKey);
         params.put("page", page);
+//        setParamsForSearch();
+//        setSearchResults();
 
         // Click listener on GV
 

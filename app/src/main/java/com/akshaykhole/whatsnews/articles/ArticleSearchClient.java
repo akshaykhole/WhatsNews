@@ -21,7 +21,7 @@ public class ArticleSearchClient {
     }
 
     public void search(RequestParams params, JsonHttpResponseHandler handler) {
-        Log.d("PARAMS", params.toString());
+        Log.d("DEBUG", params.toString());
         client.get(articleSearchUrl, params, handler);
     }
 }
