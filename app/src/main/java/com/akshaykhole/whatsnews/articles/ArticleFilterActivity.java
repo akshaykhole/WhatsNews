@@ -24,9 +24,10 @@ public class ArticleFilterActivity extends AppCompatActivity
     private Calendar calendarForStartDate;
     private Calendar calendarForEndDate;
     private Calendar c;
-    private Boolean selectingStartDate = true;
+    private Boolean selectingStartDate = false;
     private Boolean selectedStartDate = false;
     private Boolean selectedEndDate = false;
+    private final String NULL = "NULL";
     TextView tvStartDate;
     TextView tvEndDate;
     Spinner spinnerSortOrder;
@@ -101,16 +102,22 @@ public class ArticleFilterActivity extends AppCompatActivity
 
         if (selectedStartDate) {
             intent.putExtra("startDate", formatter.format(calendarForStartDate.getTime()));
+        } else {
+            intent.putExtra("startDate", "NULL");
         }
 
         if (selectedEndDate) {
             intent.putExtra("endDate", formatter.format(calendarForEndDate.getTime()));
+        } else {
+            intent.putExtra("endDate", "NULL");
         }
 
         if(spinnerSortOrder.getSelectedItemPosition() == 0) {
             intent.putExtra("sortOrder", "newest");
         } else if (spinnerSortOrder.getSelectedItemPosition() == 1) {
             intent.putExtra("sortOrder", "oldest");
+        } else {
+            intent.putExtra("sortOrder", "NULL");
         }
 
         ArrayList<String> selectedCheckboxes = new ArrayList<>();
@@ -133,11 +140,18 @@ public class ArticleFilterActivity extends AppCompatActivity
             newsDeskParamString = "news_desk:(";
 
             for(int i = 0; i < selectedCheckboxes.size(); ++i) {
-                newsDeskParamString += "\"" + selectedCheckboxes.get(i).toString() + "\" ";
+                newsDeskParamString += "\"" + selectedCheckboxes.get(i).toString() + "\"";
+
+                if (i < selectedCheckboxes.size() - 1) {
+                    newsDeskParamString += " ";
+                }
             }
 
             newsDeskParamString += ")";
+            Log.d("DEBUG", newsDeskParamString);
             intent.putExtra("newsDesk", newsDeskParamString);
+        } else {
+            intent.putExtra("newsDesk", "NULL");
         }
 
         setResult(1, intent);

@@ -1,4 +1,6 @@
 package com.akshaykhole.whatsnews.articles;
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -18,14 +20,8 @@ public class ArticleSearchClient {
         this.client = new AsyncHttpClient();
     }
 
-    public void search(RequestParams params, Integer page, JsonHttpResponseHandler handler) {
-
-//        RequestParams params = new RequestParams();
-
-//        params.put("api-key", articleApiKey);
-//        params.put("page", page);
-//        params.put("q", query);
-
+    public void search(RequestParams params, JsonHttpResponseHandler handler) {
+        Log.d("PARAMS", params.toString());
         client.get(articleSearchUrl, params, handler);
     }
 }

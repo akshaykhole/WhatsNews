@@ -47,8 +47,6 @@ public class ArticleArrayAdapter extends ArrayAdapter<ArticlesModel> {
         }
 
         if (article.getThumbNail() != "") {
-            Log.d("DEBUG", article.getThumbNail());
-
             Picasso.with(getContext())
                     .load(article.getThumbNail())
                     .fit()

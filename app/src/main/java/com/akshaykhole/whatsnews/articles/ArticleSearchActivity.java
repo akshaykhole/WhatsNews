@@ -8,9 +8,6 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
 public class ArticleSearchActivity extends AppCompatActivity {
@@ -38,6 +34,8 @@ public class ArticleSearchActivity extends AppCompatActivity {
     private static Integer page = 0;
     private static String searchQuery;
     private static SearchView searchView;
+    private static final String oopsString = "Oops! Something went wrong. We are trying hard to fix it!";
+    private static Intent intentFromFilter;
     ArticleArrayAdapter adapter;
 
     @Override
@@ -72,6 +70,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchQuery = query;
+                setParamsForSearch();
                 setSearchResults();
                 return true;
             }
@@ -89,24 +88,31 @@ public class ArticleSearchActivity extends AppCompatActivity {
         adapter.clear();
 
         ArticleSearchClient articleFetcher = new ArticleSearchClient();
-
-        articleFetcher.search(params, page, new JsonHttpResponseHandler() {
+        articleFetcher.search(params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     JSONArray articlesResponse = response.getJSONObject("response").getJSONArray("docs");
                     articles.addAll(ArticlesModel.fromJSONArray(articlesResponse));
+
+                    if(articles.isEmpty()) {
+                        showToast("No News found");
+                    }
+
+                    Log.d("DEBUG", response.toString());
                     adapter.notifyDataSetChanged();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    showToast(oopsString);
                 }
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                showToast("Oops! Something went wrong. We are trying hard to fix it!");
-                Log.d("DEBUG", responseString);
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
+                showToast(oopsString);
             }
         });
 
@@ -116,12 +122,46 @@ public class ArticleSearchActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            Log.d("DEBUGG", data.getStringExtra("startDate"));
-            Log.d("DEBUGG", data.getStringExtra("endDate"));
-            Log.d("DEBUGG", data.getStringExtra("sortOrder"));
-            Log.d("DEBUGG", data.getStringExtra("newsDesk"));
+            intentFromFilter = data;
+            setParamsForSearch();
+            setSearchResults();
         } catch (Exception e) {
             e.printStackTrace();
+            showToast(oopsString);
+        }
+    }
+
+    private void setParamsForSearch() {
+        String paramsQueryString = searchQuery;
+        String filterQueryString = null;
+
+        if (intentFromFilter != null) {
+            if (!intentFromFilter.getStringExtra("startDate").equals("NULL")) {
+                paramsQueryString += ("&begin_date=" + intentFromFilter.getStringExtra("startDate"));
+            }
+
+            if (!intentFromFilter.getStringExtra("endDate").equals("NULL")) {
+                paramsQueryString += ("&end_date=" + intentFromFilter.getStringExtra("endDate"));
+            }
+
+            if (!intentFromFilter.getStringExtra("sortOrder").equals("NULL")) {
+                paramsQueryString += ("&sort=" + intentFromFilter.getStringExtra("sortOrder"));
+            }
+
+            if (!intentFromFilter.getStringExtra("newsDesk").equals("NULL")) {
+                filterQueryString = intentFromFilter.getStringExtra("newsDesk");
+            }
+        }
+
+        params.remove("q");
+        params.remove("fq");
+
+        if(paramsQueryString != null) {
+            params.put("q", paramsQueryString);
+        }
+
+        if(filterQueryString != null) {
+            params.put("fq", filterQueryString);
         }
     }
 
@@ -134,8 +174,10 @@ public class ArticleSearchActivity extends AppCompatActivity {
         adapter = new ArticleArrayAdapter(this, articles);
         gvArticles.setAdapter(adapter);
         params = new RequestParams();
+        intentFromFilter = null;
+        searchQuery = null;
         params.put("api-key", ArticleSearchClient.articleApiKey);
         params.put("page", page);
-        params.put("q", searchQuery);
+
     }
 }
