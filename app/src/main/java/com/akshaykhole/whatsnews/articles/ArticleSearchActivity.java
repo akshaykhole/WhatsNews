@@ -92,6 +92,8 @@ public class ArticleSearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                adapter.clear();
+                articles.clear();
                 searchQuery = query;
                 setParamsForSearch();
                 setSearchResults();
@@ -146,11 +148,11 @@ public class ArticleSearchActivity extends AppCompatActivity {
                                   Throwable throwable,
                                   JSONObject errorResponse) {
 
-                showToast(oopsString + " " + errorResponse.toString());
+                // showToast(oopsString + " " + errorResponse.toString());
                 Log.d("DEBUG", errorResponse.toString());
 
                 // This seems to fix the issue. It's a potentially bad hack
-                setSearchResults();
+                // setSearchResults();
             }
         });
     }
@@ -159,6 +161,8 @@ public class ArticleSearchActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Clear adapter after returning from filter activity
         adapter.clear();
+        articles.clear();
+        page = 0;
 
         try {
             intentFromFilter = data;
@@ -194,7 +198,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
     }
 
     public void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     private void initialize() {

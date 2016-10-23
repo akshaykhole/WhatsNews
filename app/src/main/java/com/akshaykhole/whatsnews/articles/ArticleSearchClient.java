@@ -11,7 +11,7 @@ import com.loopj.android.http.RequestParams;
 
 public class ArticleSearchClient {
 
-    public static final String articleApiKey = "84f5c1eb2a0e4968aed120ca5cdae1b6";
+    public static final String articleApiKey = "d3f53934dbe54f7299c5738ca510591a";
     public static final String articleSearchUrl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     public static final String baseUrl = "https://nytimes.com/";
     private AsyncHttpClient client;
