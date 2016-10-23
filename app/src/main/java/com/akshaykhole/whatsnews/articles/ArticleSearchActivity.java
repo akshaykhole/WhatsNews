@@ -98,7 +98,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        searchView.clearFocus();
         return true;
     }
 
@@ -120,19 +120,34 @@ public class ArticleSearchActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
                     showToast(oopsString);
+                    e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString,
+            public void onFailure(int statusCode,
+                                  Header[] headers,
+                                  String responseString,
                                   Throwable throwable) {
                 showToast(oopsString);
+                Log.d("DEBUG", responseString);
+            }
+
+            // Exception for API limit exceeded comes here
+            @Override
+            public void onFailure(int statusCode,
+                                  Header[] headers,
+                                  Throwable throwable,
+                                  JSONObject errorResponse) {
+
+                showToast(oopsString + " " + errorResponse.toString());
+                Log.d("DEBUG", errorResponse.toString());
+
+                // This seems to fix the issue. It's a potentially bad hack
+                setSearchResults();
             }
         });
-
-        searchView.clearFocus();
     }
 
     @Override
@@ -153,6 +168,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
     private void setParamsForSearch() {
         params.put("q", searchQuery);
         params.put("page", page);
+
         if (intentFromFilter != null) {
             if (!intentFromFilter.getStringExtra("startDate").equals("NULL")) {
                 params.put("begin_date", intentFromFilter.getStringExtra("startDate"));
@@ -185,11 +201,10 @@ public class ArticleSearchActivity extends AppCompatActivity {
         searchQuery = null;
         params.put("api-key", ArticleSearchClient.articleApiKey);
         params.put("page", page);
-//        setParamsForSearch();
-//        setSearchResults();
+        setParamsForSearch();
+        setSearchResults();
 
         // Click listener on GV
-
         gvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
