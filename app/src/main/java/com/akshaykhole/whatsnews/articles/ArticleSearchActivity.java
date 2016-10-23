@@ -8,6 +8,8 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -179,5 +181,16 @@ public class ArticleSearchActivity extends AppCompatActivity {
         params.put("api-key", ArticleSearchClient.articleApiKey);
         params.put("page", page);
 
+        // Click listener on GV
+
+        gvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent webviewIntent = new Intent(getApplicationContext(), ArticleViewActivity.class);
+                ArticlesModel art = articles.get(i);
+                webviewIntent.putExtra("url", art.getWebUrl());
+                startActivity(webviewIntent);
+            }
+        });
     }
 }
