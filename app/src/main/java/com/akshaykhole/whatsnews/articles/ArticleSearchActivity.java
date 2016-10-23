@@ -134,36 +134,24 @@ public class ArticleSearchActivity extends AppCompatActivity {
     }
 
     private void setParamsForSearch() {
-        String paramsQueryString = searchQuery;
-        String filterQueryString = null;
+        params.put("q", searchQuery);
 
         if (intentFromFilter != null) {
             if (!intentFromFilter.getStringExtra("startDate").equals("NULL")) {
-                paramsQueryString += ("&begin_date=" + intentFromFilter.getStringExtra("startDate"));
+                params.put("begin_date", intentFromFilter.getStringExtra("startDate"));
             }
 
             if (!intentFromFilter.getStringExtra("endDate").equals("NULL")) {
-                paramsQueryString += ("&end_date=" + intentFromFilter.getStringExtra("endDate"));
+                params.put("end_date", intentFromFilter.getStringExtra("endDate"));
             }
 
             if (!intentFromFilter.getStringExtra("sortOrder").equals("NULL")) {
-                paramsQueryString += ("&sort=" + intentFromFilter.getStringExtra("sortOrder"));
+                params.put("sort", intentFromFilter.getStringExtra("sortOrder"));
             }
 
             if (!intentFromFilter.getStringExtra("newsDesk").equals("NULL")) {
-                filterQueryString = intentFromFilter.getStringExtra("newsDesk");
+                params.put("fq", intentFromFilter.getStringExtra("newsDesk"));
             }
-        }
-
-        params.remove("q");
-        params.remove("fq");
-
-        if(paramsQueryString != null) {
-            params.put("q", paramsQueryString);
-        }
-
-        if(filterQueryString != null) {
-            params.put("fq", filterQueryString);
         }
     }
 
