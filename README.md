@@ -12,6 +12,7 @@ The following **required** functionality is completed:
 * [x] User can click on "settings / filter icon" which allows selection of **advanced search options** to filter results
 * [x] User can configure advanced search filters such as:
   * [x] Begin Date (using a date picker)
+  * [x] End Date (using a date picker)
   * [x] News desk values (Arts, Fashion & Style, Sports)
   * [x] Sort order (oldest or newest)
 * [x] Subsequent searches have any filters applied to the search results
