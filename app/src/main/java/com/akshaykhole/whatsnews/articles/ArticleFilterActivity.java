@@ -140,8 +140,7 @@ public class ArticleFilterActivity extends AppCompatActivity
             intent.putExtra("newsDesk", newsDeskParamString);
         }
 
-        Log.d("DEBUGG", intent.getExtras().toString());
-
+        setResult(1, intent);
         finish();
     }
 }

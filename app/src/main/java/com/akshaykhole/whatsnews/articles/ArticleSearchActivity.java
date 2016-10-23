@@ -105,6 +105,10 @@ public class ArticleSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("DEBUGG", data.getStringExtra("startDate"));
+        Log.d("DEBUGG", data.getStringExtra("endDate"));
+        Log.d("DEBUGG", data.getStringExtra("sortOrder"));
+        Log.d("DEBUGG", data.getStringExtra("newsDesk"));
     }
 
     public void showToast(String text) {
