@@ -56,7 +56,6 @@ public class ArticleSearchActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent i = new Intent(ArticleSearchActivity.this, ArticleFilterActivity.class);
                 startActivityForResult(i, REQUEST_CODE);
-                Log.d("DEBUG", "Filtering");
                 return true;
             }
         });
@@ -106,7 +105,6 @@ public class ArticleSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("DEBUG", data.getStringExtra("test"));
     }
 
     public void showToast(String text) {

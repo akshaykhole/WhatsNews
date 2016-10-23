@@ -4,43 +4,59 @@
     android:id="@+id/activity_article_filter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="10dp"
     tools:context="com.akshaykhole.whatsnews.articles.ArticleFilterActivity">
 
-    <Button
-        android:text="After Date"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="showDatePicker"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/btnStartDate" />
+        android:orientation="horizontal"
+        android:id="@+id/layoutStartDate">
+        <Button
+            android:text="After Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showDatePicker"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/btnStartDate" />
 
-    <Button
-        android:text="Before Date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnEndDate"
-        android:onClick="showDatePicker"
-        android:layout_below="@+id/btnStartDate"
-        android:layout_alignLeft="@+id/btnStartDate"
-        android:layout_alignStart="@+id/btnStartDate" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btnStartDate"
+            android:id="@+id/tvStartDate"/>
+    </LinearLayout>
 
-    <Button
-        android:text="Done"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onSubmit"
-        android:id="@+id/btnSubmit"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:orientation="horizontal"
+        android:id="@+id/layoutEndDate"
+        android:layout_below="@+id/layoutStartDate">
+
+        <Button
+            android:text="Before Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnEndDate"
+            android:onClick="showDatePicker"
+            android:layout_below="@+id/btnStartDate"
+            android:layout_alignLeft="@+id/btnStartDate"
+            android:layout_alignStart="@+id/btnStartDate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btnEndDate"
+            android:id="@+id/tvEndDate"/>
+    </LinearLayout>
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnEndDate"
+        android:layout_below="@+id/layoutEndDate"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:paddingTop="10dp"
@@ -70,4 +86,14 @@
             android:layout_height="wrap_content"
             android:text="@string/cbSports" />
     </LinearLayout>
+
+    <Button
+        android:text="Done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSubmit"
+        android:id="@+id/btnSubmit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
