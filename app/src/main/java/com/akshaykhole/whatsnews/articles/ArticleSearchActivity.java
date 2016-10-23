@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.akshaykhole.whatsnews.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,8 +34,11 @@ public class ArticleSearchActivity extends AppCompatActivity {
     @BindView(R.id.gvArticles) GridView gvArticles;
 
     private ArrayList<ArticlesModel> articles;
+    private static RequestParams params;
+    private static Integer page = 0;
+    private static String searchQuery;
+    private static SearchView searchView;
     ArticleArrayAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,35 +66,13 @@ public class ArticleSearchActivity extends AppCompatActivity {
 
         // Set Search actions
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.clear();
-                ArticleSearchClient articleFetcher = new ArticleSearchClient();
-
-                articleFetcher.search(query, 0, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try {
-                            JSONArray articlesResponse = response.getJSONObject("response").getJSONArray("docs");
-                            articles.addAll(ArticlesModel.fromJSONArray(articlesResponse));
-                            Log.d("DEBUG", articles.toString());
-                            adapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        showToast("Oops! Something went wrong. We are trying hard to fix it!");
-                        Log.d("DEBUG", responseString);
-                    }
-                });
-
-                searchView.clearFocus();
+                searchQuery = query;
+                setSearchResults();
                 return true;
             }
 
@@ -103,12 +85,44 @@ public class ArticleSearchActivity extends AppCompatActivity {
         return true;
     }
 
+    public void setSearchResults() {
+        adapter.clear();
+
+        ArticleSearchClient articleFetcher = new ArticleSearchClient();
+
+        articleFetcher.search(params, page, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    JSONArray articlesResponse = response.getJSONObject("response").getJSONArray("docs");
+                    articles.addAll(ArticlesModel.fromJSONArray(articlesResponse));
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                showToast("Oops! Something went wrong. We are trying hard to fix it!");
+                Log.d("DEBUG", responseString);
+            }
+        });
+
+        searchView.clearFocus();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("DEBUGG", data.getStringExtra("startDate"));
-        Log.d("DEBUGG", data.getStringExtra("endDate"));
-        Log.d("DEBUGG", data.getStringExtra("sortOrder"));
-        Log.d("DEBUGG", data.getStringExtra("newsDesk"));
+        try {
+            Log.d("DEBUGG", data.getStringExtra("startDate"));
+            Log.d("DEBUGG", data.getStringExtra("endDate"));
+            Log.d("DEBUGG", data.getStringExtra("sortOrder"));
+            Log.d("DEBUGG", data.getStringExtra("newsDesk"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showToast(String text) {
@@ -119,5 +133,9 @@ public class ArticleSearchActivity extends AppCompatActivity {
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvArticles.setAdapter(adapter);
+        params = new RequestParams();
+        params.put("api-key", ArticleSearchClient.articleApiKey);
+        params.put("page", page);
+        params.put("q", searchQuery);
     }
 }
