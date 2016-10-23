@@ -2,4 +2,9 @@
     <string name="app_name">WhatsNews</string>
     <string name="etSearchQueryHint">Enter a search query</string>
     <string name="btnTextSearch">Search</string>
+    <string name="spnrSortOrderPrompt">Select a sort order</string>
+
+    <string name="cbArts">Arts</string>
+    <string name="cbFashionAndStyle">Fashion and Style</string>
+    <string name="cbSports">Sports</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.akshaykhole.whatsnews.articles;
 
+import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
 public class ArticleSearchActivity extends AppCompatActivity {
+    Integer REQUEST_CODE = 1;
     @BindView(R.id.gvArticles) GridView gvArticles;
 
     private ArrayList<ArticlesModel> articles;
@@ -46,8 +48,21 @@ public class ArticleSearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.article_search_action_bar, menu);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        // Set Filter Actions
+        MenuItem filterMenuItem = menu.findItem(R.id.action_filter);
 
+        filterMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent i = new Intent(ArticleSearchActivity.this, ArticleFilterActivity.class);
+                startActivityForResult(i, REQUEST_CODE);
+                Log.d("DEBUG", "Filtering");
+                return true;
+            }
+        });
+
+        // Set Search actions
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -87,6 +102,11 @@ public class ArticleSearchActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("DEBUG", data.getStringExtra("test"));
     }
 
     public void showToast(String text) {
